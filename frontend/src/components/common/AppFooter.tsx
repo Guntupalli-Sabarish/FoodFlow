@@ -10,16 +10,17 @@ const navLinks = [
 ];
 
 const supportLinks = [
-  { label: "Help Center", href: "#" },
-  { label: "Contact Us", href: "#" },
-  { label: "FAQs", href: "#" },
-  { label: "Terms of Service", href: "#" },
-  { label: "Privacy Policy", href: "#" },
+  { label: "Help Center", href: "mailto:support@foodflow.app" },
+  { label: "Contact Us", href: "mailto:support@foodflow.app" },
+  { label: "FAQs", href: "mailto:support@foodflow.app" },
+  { label: "Refund Policy", to: "/refund-policy" },
+  { label: "Terms of Service", to: "/terms-of-service" },
+  { label: "Privacy Policy", to: "/privacy-policy" },
 ];
 
 const socialLinks = [
   {
-    href: "#",
+    href: "https://instagram.com",
     label: "Instagram",
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
@@ -28,7 +29,7 @@ const socialLinks = [
     ),
   },
   {
-    href: "#",
+    href: "https://x.com",
     label: "Twitter / X",
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
@@ -37,7 +38,7 @@ const socialLinks = [
     ),
   },
   {
-    href: "#",
+    href: "https://facebook.com",
     label: "Facebook",
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
@@ -46,7 +47,7 @@ const socialLinks = [
     ),
   },
   {
-    href: "#",
+    href: "https://youtube.com",
     label: "YouTube",
     svg: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
@@ -104,14 +105,23 @@ export const AppFooter = () => (
         <div className="space-y-4">
           <p className="text-sm font-bold uppercase tracking-wider text-foreground">Support</p>
           <ul className="space-y-2.5">
-            {supportLinks.map(({ label, href }) => (
+            {supportLinks.map(({ label, href, to }) => (
               <li key={label}>
-                <a
-                  href={href}
-                  className="text-sm text-muted-foreground transition-colors hover:text-brand-600 dark:hover:text-brand-400"
-                >
-                  {label}
-                </a>
+                {to ? (
+                  <Link
+                    to={to}
+                    className="text-sm text-muted-foreground transition-colors hover:text-brand-600 dark:hover:text-brand-400"
+                  >
+                    {label}
+                  </Link>
+                ) : (
+                  <a
+                    href={href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-brand-600 dark:hover:text-brand-400"
+                  >
+                    {label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -137,8 +147,12 @@ export const AppFooter = () => (
             <li className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
               <span className="text-sm text-muted-foreground">
-                FoodFlow HQ, Vijayawada,<br />Andhra Pradesh 520001
+                FoodFlow HQ, Vijayawada,<br />Andhra Pradesh 520001, India
               </span>
+            </li>
+            <li className="pt-1">
+              <span className="text-xs text-muted-foreground/70 font-medium block">FSSAI License: 10023011002234</span>
+              <span className="text-xs text-muted-foreground/70 font-medium block">GST: 37AXXXX0000X1ZX</span>
             </li>
           </ul>
         </div>
@@ -149,18 +163,21 @@ export const AppFooter = () => (
     <div className="border-t border-border">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 sm:flex-row">
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} FoodFlow. All rights reserved.
+          © {new Date().getFullYear()} FoodFlow Technologies Pvt. Ltd. All rights reserved.
         </p>
         <div className="flex items-center gap-4">
-          <a href="#" className="text-xs text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+          <Link to="/terms-of-service" className="text-xs text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
             Terms
-          </a>
-          <a href="#" className="text-xs text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+          </Link>
+          <Link to="/privacy-policy" className="text-xs text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
             Privacy
-          </a>
-          <a href="#" className="text-xs text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+          </Link>
+          <Link to="/cookie-policy" className="text-xs text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
             Cookies
-          </a>
+          </Link>
+          <Link to="/refund-policy" className="text-xs text-muted-foreground hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+            Refunds
+          </Link>
         </div>
       </div>
     </div>

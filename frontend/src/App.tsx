@@ -1,5 +1,6 @@
 import { AppRoutes } from "@/routes";
 import { useAuth } from "@/hooks/useAuth";
+import { CookieConsentBanner } from "@/components/common/CookieConsentBanner";
 
 const PageLoader = () => (
   <div className="flex min-h-screen items-center justify-center bg-[#0b0c10]">
@@ -23,7 +24,12 @@ const App = () => {
   if (!ready) {
     return <PageLoader />;
   }
-  return <AppRoutes />;
+  return (
+    <>
+      <AppRoutes />
+      <CookieConsentBanner />
+    </>
+  );
 };
 
 export default App;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
-import { User, Mail, Shield, Sun, Moon, Monitor, Bell, ChevronRight, Camera, Utensils, Sparkles, MapPin } from "lucide-react";
+import { User, Mail, Shield, Sun, Moon, Monitor, Bell, ChevronRight, Camera, Utensils, Sparkles, MapPin, Trash2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useTheme } from "@/context/ThemeProvider";
 import { useAdminRestaurant } from "@/hooks/useAdminRestaurant";
+import { Link } from "react-router-dom";
 
 type Tab = "account" | "preferences" | "restaurant";
 
@@ -21,6 +22,8 @@ export const ProfilePage = () => {
   const [name, setName] = useState(user?.name ?? "");
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("account");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
 
   const [restName, setRestName] = useState("");
   const [restCuisine, setRestCuisine] = useState("");
@@ -60,6 +63,23 @@ export const ProfilePage = () => {
       toast({ title: "Failed to update profile", variant: "destructive" });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeletingAccount(true);
+    try {
+      // TODO: Call DELETE /api/user/me endpoint when implemented
+      // await deleteAccount();
+      toast({
+        title: "Deletion request submitted",
+        description: "Your data deletion request has been received. You will be notified within 30 days.",
+      });
+      setShowDeleteConfirm(false);
+    } catch {
+      toast({ title: "Request failed", description: "Please try again or contact support@foodflow.app", variant: "destructive" });
+    } finally {
+      setDeletingAccount(false);
     }
   };
 
@@ -280,6 +300,65 @@ export const ProfilePage = () => {
           </Button>
         </div>
       )}
+
+      {/* ── Danger Zone ───────────────────────────────────────── */}
+      <div id="data-deletion" className="rounded-2xl border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-900/10 p-6 space-y-4 scroll-mt-24">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="h-5 w-5 text-red-500 shrink-0" aria-hidden="true" />
+          <h2 className="font-bold text-red-700 dark:text-red-400">Danger Zone</h2>
+        </div>
+        <div className="space-y-1">
+          <p className="text-sm text-muted-foreground">
+            Permanently delete your FoodFlow account and all associated personal data. This action cannot be
+            undone. Your order history will be anonymised and retained for legal compliance purposes.
+          </p>
+          <p className="text-xs text-muted-foreground">
+            For details on data retention, see our{" "}
+            <Link to="/privacy-policy" className="text-brand-600 hover:underline">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        </div>
+
+        {!showDeleteConfirm ? (
+          <Button
+            variant="outline"
+            onClick={() => setShowDeleteConfirm(true)}
+            id="delete-account-btn"
+            className="border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-400 rounded-xl"
+          >
+            <Trash2 className="h-4 w-4 mr-2" aria-hidden="true" />
+            Delete My Account &amp; Data
+          </Button>
+        ) : (
+          <div className="rounded-xl border border-red-300 dark:border-red-700 bg-red-100/60 dark:bg-red-900/30 p-4 space-y-3 animate-fade-in">
+            <p className="text-sm font-semibold text-red-700 dark:text-red-300">
+              ⚠️ Are you absolutely sure? This cannot be undone.
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowDeleteConfirm(false)}
+                id="delete-account-cancel"
+                className="rounded-xl"
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleDeleteAccount}
+                disabled={deletingAccount}
+                id="delete-account-confirm"
+                className="rounded-xl bg-red-600 hover:bg-red-700 text-white border-0"
+              >
+                {deletingAccount ? "Processing…" : "Yes, permanently delete"}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

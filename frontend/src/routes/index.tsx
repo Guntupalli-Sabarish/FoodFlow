@@ -8,6 +8,11 @@ import { AdminLayout } from "@/layouts/AdminLayout";
 import { SuperAdminLayout } from "@/layouts/SuperAdminLayout";
 
 // ── Lazy-loaded pages (each becomes its own JS chunk) ─────────────────────────
+// Legal pages
+const PrivacyPolicyPage   = lazy(() => import("@/pages/legal/PrivacyPolicyPage").then(m => ({ default: m.PrivacyPolicyPage })));
+const TermsOfServicePage  = lazy(() => import("@/pages/legal/TermsOfServicePage").then(m => ({ default: m.TermsOfServicePage })));
+const RefundPolicyPage    = lazy(() => import("@/pages/legal/RefundPolicyPage").then(m => ({ default: m.RefundPolicyPage })));
+const CookiePolicyPage    = lazy(() => import("@/pages/legal/CookiePolicyPage").then(m => ({ default: m.CookiePolicyPage })));
 const LandingPage                   = lazy(() => import("@/pages/LandingPage").then(m => ({ default: m.LandingPage })));
 const LoginPage                     = lazy(() => import("@/pages/auth/LoginPage").then(m => ({ default: m.LoginPage })));
 const RegisterPage                  = lazy(() => import("@/pages/auth/RegisterPage").then(m => ({ default: m.RegisterPage })));
@@ -51,6 +56,14 @@ export const AppRoutes = () => (
     <Routes>
       {/* Public landing page — no layout wrapper needed */}
       <Route path="/landing" element={<LandingPage />} />
+
+      {/* Legal pages — publicly accessible, wrapped in PublicLayout for header/footer */}
+      <Route element={<PublicLayout />}>
+        <Route path="/privacy-policy"   element={<PrivacyPolicyPage />} />
+        <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+        <Route path="/refund-policy"    element={<RefundPolicyPage />} />
+        <Route path="/cookie-policy"    element={<CookiePolicyPage />} />
+      </Route>
 
       <Route element={<PublicLayout />}>
         <Route path="/login"           element={<LoginPage />} />

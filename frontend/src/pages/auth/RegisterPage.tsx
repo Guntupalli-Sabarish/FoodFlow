@@ -7,8 +7,13 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 export const RegisterPage = () => {
   usePageTitle("Register");
   const [loading, setLoading] = useState(false);
+  const [consented, setConsented] = useState(false);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
+
+  const allAgreed = consented && ageConfirmed;
 
   const handleGoogleSignup = () => {
+    if (!allAgreed) return;
     setLoading(true);
     const rawApiUrl = import.meta.env.VITE_API_BASE_URL;
     const backendUrl = rawApiUrl || "http://localhost:8080";
@@ -25,13 +30,70 @@ export const RegisterPage = () => {
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Consent checkboxes */}
+          <div className="space-y-3 rounded-xl border border-border bg-secondary/30 p-4">
+            {/* ToS + Privacy consent */}
+            <label
+              htmlFor="register-consent"
+              className="flex items-start gap-3 cursor-pointer group"
+            >
+              <input
+                id="register-consent"
+                type="checkbox"
+                checked={consented}
+                onChange={(e) => setConsented(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-brand-500 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500"
+                aria-required="true"
+              />
+              <span className="text-xs text-muted-foreground leading-relaxed">
+                I agree to FoodFlow's{" "}
+                <Link
+                  to="/terms-of-service"
+                  target="_blank"
+                  className="text-brand-600 font-semibold hover:underline"
+                >
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  to="/privacy-policy"
+                  target="_blank"
+                  className="text-brand-600 font-semibold hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+                , including the processing of my personal data for account and order management.
+              </span>
+            </label>
+
+            {/* Age confirmation */}
+            <label
+              htmlFor="register-age"
+              className="flex items-start gap-3 cursor-pointer group"
+            >
+              <input
+                id="register-age"
+                type="checkbox"
+                checked={ageConfirmed}
+                onChange={(e) => setAgeConfirmed(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-brand-500 cursor-pointer focus-visible:ring-2 focus-visible:ring-brand-500"
+                aria-required="true"
+              />
+              <span className="text-xs text-muted-foreground leading-relaxed">
+                I confirm that I am <strong>18 years of age or older</strong>. FoodFlow is not intended for
+                children under 18 in compliance with India's DPDP Act, 2023.
+              </span>
+            </label>
+          </div>
+
           <Button
             type="button"
-            className="w-full h-12 flex items-center justify-center gap-2 btn-brand-gradient text-white font-semibold text-base shadow-lg shadow-brand-500/20 rounded-xl border-0 transition-all hover:scale-[1.02]"
+            className="w-full h-12 flex items-center justify-center gap-2 btn-brand-gradient text-white font-semibold text-base shadow-lg shadow-brand-500/20 rounded-xl border-0 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             onClick={handleGoogleSignup}
-            disabled={loading}
+            disabled={loading || !allAgreed}
+            aria-disabled={!allAgreed}
           >
-            <svg className="h-5 w-5 bg-white p-0.5 rounded-full" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 bg-white p-0.5 rounded-full" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -51,6 +113,13 @@ export const RegisterPage = () => {
             </svg>
             {loading ? "Redirecting..." : "Sign up with Google"}
           </Button>
+
+          {!allAgreed && (
+            <p className="text-center text-xs text-muted-foreground" role="status" aria-live="polite">
+              Please accept the terms and confirm your age to continue.
+            </p>
+          )}
+
           <div className="text-center text-sm mt-4">
             <Link to="/login" className="text-brand-600 font-semibold hover:underline">
               Already have an account? Sign in

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { MapPin, CreditCard, ArrowLeft, Loader2, Store, ReceiptText, ShieldCheck } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { MapPin, CreditCard, ArrowLeft, Loader2, Store, ReceiptText, ShieldCheck, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -290,11 +290,29 @@ export const CheckoutPage = () => {
                   <span>{formatCurrency(quote.subtotal)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Delivery Fee</span>
+                  <span className="flex items-center gap-1">
+                    Delivery Fee
+                    <span
+                      title="Delivery fee charged by the restaurant. May be waived on qualifying orders."
+                      aria-label="Delivery fee info"
+                      className="cursor-help"
+                    >
+                      <Info className="h-3.5 w-3.5 text-muted-foreground/60" aria-hidden="true" />
+                    </span>
+                  </span>
                   <span>{formatCurrency(quote.deliveryFee)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span>Taxes (8%)</span>
+                  <span className="flex items-center gap-1">
+                    Taxes (GST 8%)
+                    <span
+                      title="GST (Goods and Services Tax) at 8% as mandated by Indian tax law."
+                      aria-label="Tax info"
+                      className="cursor-help"
+                    >
+                      <Info className="h-3.5 w-3.5 text-muted-foreground/60" aria-hidden="true" />
+                    </span>
+                  </span>
                   <span>{formatCurrency(quote.tax)}</span>
                 </div>
               </div>
@@ -318,6 +336,14 @@ export const CheckoutPage = () => {
                   `Place Order • ${formatCurrency(quote.total)}`
                 )}
               </Button>
+
+              {/* Terms reference */}
+              <p className="hidden lg:block text-center text-xs text-muted-foreground leading-relaxed">
+                By placing this order you agree to our{" "}
+                <Link to="/terms-of-service" className="text-brand-600 hover:underline" target="_blank">Terms of Service</Link>
+                {" "}and{" "}
+                <Link to="/refund-policy" className="text-brand-600 hover:underline" target="_blank">Refund Policy</Link>.
+              </p>
             </CardContent>
           </Card>
 

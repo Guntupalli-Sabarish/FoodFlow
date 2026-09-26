@@ -7,7 +7,16 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "@/components/ui/toaster";
 
-createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")!;
+
+// Inject skip-to-main-content link for keyboard/screen reader users (WCAG 2.4.1)
+const skipLink = document.createElement("a");
+skipLink.href = "#main-content";
+skipLink.className = "skip-link";
+skipLink.textContent = "Skip to main content";
+document.body.insertBefore(skipLink, rootElement);
+
+createRoot(rootElement).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
@@ -19,3 +28,4 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </StrictMode>
 );
+

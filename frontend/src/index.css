@@ -89,6 +89,32 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  /* Global keyboard focus-visible ring for accessibility (WCAG 2.1 AA) */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Skip-to-content link for screen reader / keyboard users */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 9999;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: top 0.2s;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
